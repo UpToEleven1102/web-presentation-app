@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 
 class Footer extends Component {
-    render(){
+    render() {
         return (
             <footer>
-                <div>
-                    Footer component
+                <div className="text-center fixed-bottom footer-copyright py-2 navbar-light bg-dark">© 2019 Copyright
                 </div>
             </footer>
         )

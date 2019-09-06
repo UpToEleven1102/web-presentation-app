@@ -1,11 +1,12 @@
-const uri = "http://localhost:3000"
+import config from '../config'
+
+const uri = config.uri
 
 function getData(url) {
     return fetch(url).then(res => res.json())
 }
 
 function postData(url, data) {
-    console.log('hitting url ', url)
     return fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
