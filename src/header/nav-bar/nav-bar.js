@@ -6,7 +6,8 @@ class NavBar extends Component {
         return (
             <header>
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <Link className="navbar-brand" to="/">Student Database ¯\_(ツ)_/¯</Link>
+                    <Link className="navbar-brand" to="/">Student Database</Link>
+                    {/* ¯\_(ツ)_/¯*/}
                     <button className="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -15,13 +16,13 @@ class NavBar extends Component {
 
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
+                            <li className="nav-item active" id="homeTab">
                                 <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item" id="editTab">
                                 <Link className="nav-link" to="/edit-students">Edit Student</Link>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item" id="addTab">
                                 <Link className="nav-link" to="/add-students">Add Student</Link>
                             </li>
                         </ul>
