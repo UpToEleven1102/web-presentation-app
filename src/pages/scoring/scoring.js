@@ -1,5 +1,5 @@
 import React from 'react'
-import Iframe from "../presentation/components/iframe";
+import Iframe from "react-iframe";
 
 class ScoringPage extends React.Component {
     constructor(props) {
@@ -10,12 +10,10 @@ class ScoringPage extends React.Component {
     render() {
         return (
             <div>
-                <div>
-                    <div>
-                        <Iframe url={'google.com'}/>
-                    </div>
-                    <p>scoring options</p>
-                </div>
+                <Iframe
+                    url={'google.com'}
+                />
+                <p>scoring options</p>
             </div>
         )
     }

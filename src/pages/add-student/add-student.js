@@ -30,7 +30,7 @@ class AddStudentPage extends Component {
     }
 
     submitData = async () => {
-        const res = await postStudent({
+        await postStudent({
             name: this.state.name,
             url: this.state.url
         });
@@ -72,11 +72,10 @@ class AddStudentPage extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {/*{JSON.stringify(this.state.students)}*/}
                         {this.state.students.map(student => (
                             <tr>
                                 <th scope="row">{student.id}</th>
-                                <td><img style={{height: 100}} src={student.image}/></td>
+                                <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.name}</td>
                                 <td>{student.url}</td>
                                 <td><button onClick={() => this.editStudent(student)} type={'button'} className={'btn' +

@@ -4,3 +4,10 @@
     padding-top: 2em;
     padding-bottom: 2em;
 }
+
+.side-bar {
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    width: auto;
+}
