@@ -1,6 +1,6 @@
 import config from '../config'
 
-const uri = config.uri
+const uri = config.uri;
 
 function getData(url) {
     return fetch(url).then(res => res.json())

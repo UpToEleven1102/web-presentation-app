@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import { Navbar } from 'react-bootstrap';
 
 class NavBar extends Component {
     render() {
@@ -22,17 +23,26 @@ class NavBar extends Component {
                             <li className="nav-item" id="editTab">
                                 <Link className="nav-link" to="/presentation">Presentation</Link>
                             </li>
-                            {
-                                this.props.user &&
-                                (this.props.user.name === 'Huyen!' || this.props.user.name == 'Dang')
-                                &&
-                                <li className="nav-item" id="addTab">
-                                    <Link className="nav-link" to="/add-students">Students</Link>
-                                </li>
-                            }
+                            {/*{*/}
+                                {/*this.props.user &&*/}
+                                {/*(this.props.user.name === 'Huyen!' || this.props.user.name == 'Dang')*/}
+                                {/*&&*/}
+                                {/*<li className="nav-item" id="addTab">*/}
+                                    {/*<Link className="nav-link" to="/add-students">Students</Link>*/}
+                                {/*</li>*/}
+                            {/*}*/}
+
 
                             <li className="nav-item" id="addTab">
                                 <Link className="nav-link" to="/scoring">Scoring</Link>
+                            </li>
+
+                            <li className="nav-item" id="addTab" style={{float: "right"}}>
+                                <Link className="nav-link" to="/sign-in">Sign in</Link>
+                            </li>
+
+                            <li className="nav-item" id="addTab">
+                                <Link className="nav-link" to="/add-students">Students</Link>
                             </li>
                         </ul>
                     </div>

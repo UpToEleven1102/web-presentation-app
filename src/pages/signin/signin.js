@@ -8,7 +8,7 @@ class LoginPage extends React.Component {
         return (
             <div>
                 <input placeholder={'name'} />
-                <input placeholder={'student id'} />
+                <input placeholder={'password'} />
                 <button onClick={this.login}>Submit</button>
             </div>
         );

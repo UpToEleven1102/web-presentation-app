@@ -6,7 +6,7 @@ import './add-student.css'
 
 class AddStudentPage extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             students: [],
             name: '',
@@ -19,7 +19,7 @@ class AddStudentPage extends Component {
     reset() {
         getStudents().then(students => {
             this.setState({students})
-        })
+        });
         this.setState({name: '', url: ''})
     }
 
@@ -42,7 +42,7 @@ class AddStudentPage extends Component {
     render() {
         return (<div>
             <div className="header">
-                <h1>Add Student Info</h1>
+                <h3>Add Student Info</h3>
 
                 <div className="field">
                     <label htmlFor='name'>Name: </label>
@@ -54,7 +54,9 @@ class AddStudentPage extends Component {
                     <button type='submit' onClick={this.submitData}>Submit</button>
                 </div>
 
-                <table>
+                <div>
+
+                <table className="table">
                     <thead>
                     <tr>
                         <th scope="col">id</th>
@@ -79,6 +81,7 @@ class AddStudentPage extends Component {
                     </tbody>
 
                 </table>
+                </div>
                 <Modal
                     isOpen={this.state.modalOpen}
                 >
