@@ -4,7 +4,7 @@ import Iframe from "react-iframe";
 
 import {XYPlot, LineSeries, XAxis, YAxis, HorizontalGridLines, VerticalGridLines} from 'react-vis'
 import {curveCatmullRom} from 'd3-shape'
-import {getStudents} from "../../services/students";
+import {getStudents, postPresentingStudent} from "../../services/students";
 import './presentation.css';
 
 class PresentationPage extends React.Component {
@@ -36,20 +36,23 @@ class PresentationPage extends React.Component {
 
         // get from backend
         let idx = 0
-        this.changeURL(idx)
+        await this.changeURL(idx)
         idx++
-        this.interval = setInterval(() => {
-            this.changeURL(idx)
+        this.interval = setInterval(async () => {
+            await this.changeURL(idx)
             idx++
-        }, 950000)
+        }, 10000)
     }
 
-    changeURL = (idx) => {
-        this.timeOut = setTimeout(() => {
+    changeURL = async (idx) => {
+        this.timeOut = setTimeout(async () => {
             this.setState({
                 modalOpen: true
             })
+            if (idx !== this.state.students.length)
+                await postPresentingStudent(this.state.students[idx])
         }, 5000)
+        await postPresentingStudent({})
         if (idx === this.state.students.length) {
             this.setState({
                 modalOpen: false,
