@@ -1,16 +1,33 @@
 import React from 'react'
+import './singin.css'
 
 class LoginPage extends React.Component {
-    login = () => {
-        this.props.setUser({name: 'Huyen'})
+    constructor() {
+        super()
+        this.state = {
+            passCode : ''
+        }
     }
+
+    passCode = 'caigico???'
+
+    login = () => {
+        if (this.state.passCode === this.passCode)
+            this.props.success({name: 'Huyen'})
+        else
+            alert('Wrong passcode ¯\\_(ツ)_/¯')
+        this.setState({passCode: ''})
+    }
+
     render() {
         return (
-            <div>
-                <input placeholder={'name'} />
-                <input placeholder={'password'} />
+            <form className={'login-page'}
+            >
+                <input type="password" placeholder={'code'} value={this.state.passCode} onChange={e => this.setState({
+                    passCode: e.target.value
+                })}/>
                 <button onClick={this.login}>Submit</button>
-            </div>
+            </form>
         );
     }
 }

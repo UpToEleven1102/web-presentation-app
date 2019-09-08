@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
-import {getStudents, postStudent} from '../../services/students'
+import React, {Component, Fragment} from 'react'
 import Modal from 'react-modal'
+
+import {getStudents, postStudent} from '../../services/students'
+import LoginPage from '../signin/signin'
 import './add-student.css'
 
 class AddStudentPage extends Component {
@@ -12,7 +13,8 @@ class AddStudentPage extends Component {
             name: '',
             url: '',
             modalOpen: false,
-            student: null
+            student: null,
+            user: null
         }
     }
 
@@ -40,7 +42,10 @@ class AddStudentPage extends Component {
     }
 
     render() {
-        return (<div>
+
+        const content = !this.state.user ? <LoginPage
+            success={(user) => this.setState({user})}
+        /> : <div>
             <div className="header">
                 <h3>Add Student Info</h3>
 
@@ -56,31 +61,31 @@ class AddStudentPage extends Component {
 
                 <div>
 
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">URL</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {/*{JSON.stringify(this.state.students)}*/}
-                    {this.state.students.map(student => (
+                    <table className="table">
+                        <thead>
                         <tr>
-                            <th scope="row">{student.id}</th>
-                            <td><img style={{height: 100}} src={student.image}/></td>
-                            <td>{student.name}</td>
-                            <td>{student.url}</td>
-                            <td><button onClick={() => this.editStudent(student)} type={'button'} className={'btn' +
-                            ' btn-success'}>Edit</button></td>
+                            <th scope="col">id</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">URL</th>
+                            <th scope="col">Action</th>
                         </tr>
-                    ))}
-                    </tbody>
+                        </thead>
+                        <tbody>
+                        {/*{JSON.stringify(this.state.students)}*/}
+                        {this.state.students.map(student => (
+                            <tr>
+                                <th scope="row">{student.id}</th>
+                                <td><img style={{height: 100}} src={student.image}/></td>
+                                <td>{student.name}</td>
+                                <td>{student.url}</td>
+                                <td><button onClick={() => this.editStudent(student)} type={'button'} className={'btn' +
+                                ' btn-success'}>Edit</button></td>
+                            </tr>
+                        ))}
+                        </tbody>
 
-                </table>
+                    </table>
                 </div>
                 <Modal
                     isOpen={this.state.modalOpen}
@@ -90,7 +95,15 @@ class AddStudentPage extends Component {
                     <button >Submit</button>
                 </Modal>
             </div>
-        </div>)
+        </div>
+
+        return (
+            <Fragment>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {content}
+                </div>
+            </Fragment>
+            )
     }
 
 

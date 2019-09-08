@@ -4,7 +4,6 @@ import PresentationPage from './pages/presentation/presentation'
 import AddStudentPage from './pages/add-student/add-student'
 import ScoringPage from "./pages/scoring/scoring";
 import HomePage from './pages/home/home'
-import LoginPage from "./pages/signin/signin";
 import NavBar from './header/nav-bar/nav-bar'
 import Footer from './footer/footer'
 
@@ -19,7 +18,6 @@ function App() {
             <Route exact path="/" component={HomePage}/>
             <Route path="/presentation" component={PresentationPage}/>
             <Route path="/add-students" component={AddStudentPage} />
-            <Route path="/sign-in" component={LoginPage} />
             <Route path="/scoring" component={() => <ScoringPage user={user} />} />
             <Footer />
         </Router>
