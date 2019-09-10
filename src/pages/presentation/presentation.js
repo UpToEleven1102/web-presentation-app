@@ -19,7 +19,7 @@ class PresentationPage extends React.Component {
     }
 
     async componentDidMount() {
-        const students = await getStudents()
+        const students = await getStudents(); // get from back end
         const data = [
             {x: 0, y: 8},
             {x: 1, y: 5},
@@ -31,13 +31,13 @@ class PresentationPage extends React.Component {
             {x: 7, y: 3},
             {x: 8, y: 2},
             {x: 9, y: 0}
-        ]
-        await this.setState({students, data})
+        ];
+        await this.setState({students, data});
 
         // get from backend
         let idx = 0
         await this.changeURL(idx)
-        idx++
+        idx++;
         this.interval = setInterval(async () => {
             await this.changeURL(idx)
             idx++
@@ -48,11 +48,12 @@ class PresentationPage extends React.Component {
         this.timeOut = setTimeout(async () => {
             this.setState({
                 modalOpen: true
-            })
+            });
             if (idx !== this.state.students.length)
                 await postPresentingStudent(this.state.students[idx])
-        }, 5000)
-        await postPresentingStudent({})
+        }, 5000);
+
+        await postPresentingStudent({});
         if (idx === this.state.students.length) {
             this.setState({
                 modalOpen: false,

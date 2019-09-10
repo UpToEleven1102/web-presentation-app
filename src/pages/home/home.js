@@ -7,12 +7,9 @@ class HomePage extends React.Component {
         return (
             <div>
                 <div className="header">
-                    {/*<h2>Class Home Page</h2>*/}
                     <Iframe url="https://idatavisualizationlab.github.io/CS3366/"
-                            width="1300px"
-                            height="900px"
-                        // id="myId"
-                        // className="myClassname"
+                            width="80%"
+                            height="1200px"
                             margin-top="30px"
                             display="initial"
                             position="relative"

@@ -22,15 +22,6 @@ class NavBar extends Component {
                             <li className="nav-item" id="editTab">
                                 <Link className="nav-link" to="/presentation">Presentation</Link>
                             </li>
-                            {/*{*/}
-                                {/*this.props.user &&*/}
-                                {/*(this.props.user.name === 'Huyen!' || this.props.user.name == 'Dang')*/}
-                                {/*&&*/}
-                                {/*<li className="nav-item" id="addTab">*/}
-                                    {/*<Link className="nav-link" to="/add-students">Students</Link>*/}
-                                {/*</li>*/}
-                            {/*}*/}
-
 
                             <li className="nav-item" id="addTab">
                                 <Link className="nav-link" to="/scoring">Scoring</Link>

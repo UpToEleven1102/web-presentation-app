@@ -9,7 +9,7 @@ class LoginPage extends React.Component {
         }
     }
 
-    passCode = 'caigico???'
+    passCode = 'huyen'
 
     login = () => {
         if (this.state.passCode === this.passCode)

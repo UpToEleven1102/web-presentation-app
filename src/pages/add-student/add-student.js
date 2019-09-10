@@ -10,8 +10,10 @@ class AddStudentPage extends Component {
         super(props);
         this.state = {
             students: [],
+            id: '',
             name: '',
             url: '',
+            image: '',
             modalOpen: false,
             student: null,
             user: null
@@ -22,7 +24,7 @@ class AddStudentPage extends Component {
         getStudents().then(students => {
             this.setState({students})
         });
-        this.setState({name: '', url: ''})
+        this.setState({name: '', url: '', image: ''})
     }
 
     componentDidMount() {
@@ -32,14 +34,15 @@ class AddStudentPage extends Component {
     submitData = async () => {
         await postStudent({
             name: this.state.name,
-            url: this.state.url
+            url: this.state.url,
+            image: this.state.image,
         });
         this.reset()
     }
 
     editStudent = (student) => {
         this.setState({modalOpen: true, student: student})
-    }
+    };
 
     render() {
 
@@ -52,6 +55,10 @@ class AddStudentPage extends Component {
                 <div className="field">
                     <label htmlFor='name'>Name: </label>
                     <input id='name' name='name' value={this.state.name} type="text" onChange={e => this.setState({name: e.target.value})}/>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                    <label htmlFor='image'>Image Link: </label>
+                    <input id='image' name='image' value={this.state.image} type="text" onChange={e => this.setState({image: e.target.value})}/>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
                     <label htmlFor="url">URL: </label>
