@@ -2,8 +2,8 @@ import React from 'react'
 import './singin.css'
 
 class LoginPage extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             passCode : ''
         }

@@ -16,7 +16,7 @@ class PresentationPage extends React.Component {
             students: [],
             student: 0,
             modalOpen: false,
-            countdown: 9,
+            countdown: 0,
         }
     }
 
@@ -40,19 +40,11 @@ class PresentationPage extends React.Component {
         let idx = 0
         await this.changeURL(idx)
         idx++;
+
         this.interval = setInterval(async () => {
             await this.changeURL(idx)
             idx++
         }, 10000)
-
-        this.timerID = setInterval(
-            () => {
-                this.tick();
-                if (this.state.countdown < 1){
-                    clearInterval(this.timerID);
-                }},
-            1000
-        );
     }
     componentWillUnmount() {
         clearInterval(this.timerID);
@@ -65,15 +57,27 @@ class PresentationPage extends React.Component {
     }
     changeURL = async (idx) => {
         this.timeOut = setTimeout(async () => {
+            // open modal
             this.setState({
                 modalOpen: true
             });
             if (idx !== this.state.students.length)
                 await postPresentingStudent(this.state.students[idx])
-        }, 5000);
+        }, 1000);
+
+        this.timerID = setInterval(
+            () => {
+                this.tick();
+                if (this.state.countdown < 1){
+                    clearInterval(this.timerID);
+                }},
+            1000
+        );
 
         await postPresentingStudent({});
+
         if (idx === this.state.students.length) {
+            // reach end of list
             this.setState({
                 modalOpen: false,
                 student: null,
@@ -81,13 +85,14 @@ class PresentationPage extends React.Component {
             })
             clearTimeout(this.timeOut)
             clearInterval(this.interval)
-            alert('Done')
+            // alert('Done')
             return
         }
         this.setState({
             modalOpen: false,
             student: this.state.students[idx],
             currentUrl: this.state.students[idx].url,
+            countdown: 6,
         })
     }
 
