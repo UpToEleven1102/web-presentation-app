@@ -33,9 +33,10 @@ class AddStudentPage extends Component {
 
     submitData = async () => {
         await postStudent({
+            id: this.state.students.length+1,
             name: this.state.name,
-            url: this.state.url,
-            image: this.state.image,
+            url: this.state.url || "https://en.wikipedia.org/wiki/Special:Random",
+            image: this.state.image || "https://source.unsplash.com/random/" + (this.state.students.length + 1),
         });
         this.reset()
     }
@@ -45,7 +46,6 @@ class AddStudentPage extends Component {
     };
 
     render() {
-
         const content = !this.state.user ? <LoginPage
             success={(user) => this.setState({user})}
         /> : <div>
@@ -54,20 +54,26 @@ class AddStudentPage extends Component {
 
                 <div className="field">
                     <label htmlFor='name'>Name: </label>
-                    <input id='name' name='name' value={this.state.name} type="text" onChange={e => this.setState({name: e.target.value})}/>
+                    <input id='name' name='name'
+                           value={this.state.name} type="text"
+                           onChange={e => this.setState({name: e.target.value})}/>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
                     <label htmlFor='image'>Image Link: </label>
-                    <input id='image' name='image' value={this.state.image} type="text" onChange={e => this.setState({image: e.target.value})}/>
+                    <input id='image' name='image'
+                           value={this.state.image}
+                           type="text" onChange={e => this.setState({image: e.target.value})}/>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
 
                     <label htmlFor="url">URL: </label>
-                    <input id='url' name='url' value={this.state.url} type="text" onChange={e => this.setState({url: e.target.value})}/><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <input id='url' name='url'
+                           value={this.state.url} type="text"
+                           onChange={e => this.setState({url: e.target.value})}/>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <button type='submit' onClick={this.submitData}>Submit</button>
                 </div>
 
                 <div>
-
                     <table className="table">
                         <thead>
                         <tr>
