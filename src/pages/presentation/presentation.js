@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import Modal from 'react-modal'
 import Iframe from "react-iframe";
 
@@ -6,6 +6,7 @@ import {XYPlot, LineSeries, XAxis, YAxis, HorizontalGridLines, VerticalGridLines
 import {curveCatmullRom} from 'd3-shape'
 import {getStudents, postPresentingStudent} from "../../services/students";
 import './presentation.css';
+import LoginPage from "../signin/signin";
 
 class PresentationPage extends React.Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class PresentationPage extends React.Component {
             currentUrl: 'www.google.com',
             students: [],
             student: 0,
-            modalOpen: false
+            modalOpen: false,
+            countdown: 9,
         }
     }
 
@@ -42,8 +44,25 @@ class PresentationPage extends React.Component {
             await this.changeURL(idx)
             idx++
         }, 10000)
+
+        this.timerID = setInterval(
+            () => {
+                this.tick();
+                if (this.state.countdown < 1){
+                    clearInterval(this.timerID);
+                }},
+            1000
+        );
+    }
+    componentWillUnmount() {
+        clearInterval(this.timerID);
     }
 
+    tick() {
+        this.setState((state) => ({
+            countdown: state.countdown-1
+        }));
+    }
     changeURL = async (idx) => {
         this.timeOut = setTimeout(async () => {
             this.setState({
@@ -58,7 +77,7 @@ class PresentationPage extends React.Component {
             this.setState({
                 modalOpen: false,
                 student: null,
-                currentUrl: ''
+                currentUrl: '',
             })
             clearTimeout(this.timeOut)
             clearInterval(this.interval)
@@ -68,13 +87,14 @@ class PresentationPage extends React.Component {
         this.setState({
             modalOpen: false,
             student: this.state.students[idx],
-            currentUrl: this.state.students[idx].url
+            currentUrl: this.state.students[idx].url,
         })
     }
 
     render() {
-        return (
-            <div>
+        const content = !this.state.user ? <LoginPage
+            success={(user) => this.setState({user})}
+        /> : <div>
                 <div className="header">
                     <table>
                         <thead>
@@ -118,7 +138,9 @@ class PresentationPage extends React.Component {
                                     }} className={'float-right'}>X</button>
                                 </div>
                                 <div>
-                                    <p>Timer</p>
+                                    <p>{this.state.countdown ?
+                                        ("Time left: " + this.state.countdown + "seconds") :
+                                    "EXPRIRED"} </p>
                                 </div>
                                 <div>
                                     <XYPlot height={200} width={250}>
@@ -145,6 +167,14 @@ class PresentationPage extends React.Component {
                     </Modal>
                 </div>
             </div>
+
+        return (
+            <Fragment>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    {content}
+                </div>
+            </Fragment>
+
         )
     }
 }
