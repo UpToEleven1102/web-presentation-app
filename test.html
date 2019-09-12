@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="btn">Click me</button>
+<p id="demo"> </p>
+<script>
+    let id;
+    let paused = true;
+    let seconds = 10;
+    let btn = document.querySelector("#btn");
+
+    btn.addEventListener("click", ()=>{
+        toggleTimer();
+    });
+    
+    function startTimer(){
+        id = setInterval(()=>{
+            document.getElementById("demo").innerHTML =  seconds;
+            seconds--;
+            console.log(id);
+            if (seconds < 0){
+                document.getElementById("demo").innerHTML =  "EXPIRED";
+                document.getElementById("btn").innerHTML = "Start over";
+                clearInterval(id);
+            }
+        }, 1000);
+    }
+
+    function stopTimer(){
+        clearInterval(id);
+        console.log(id);
+    }
+
+    function toggleTimer(){
+        // call to start or stop
+        console.log(paused);
+        if(paused){
+            document.getElementById("btn").innerHTML = "Playing"
+            paused = false;
+            startTimer();
+        } else {
+            document.getElementById("btn").innerHTML = "Paused"
+            paused = true;
+            stopTimer();
+        }
+    }
+</script>
+</body>
+</html>

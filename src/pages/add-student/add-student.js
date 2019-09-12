@@ -36,7 +36,7 @@ class AddStudentPage extends Component {
             id: this.state.students.length+1,
             name: this.state.name,
             url: this.state.url || "https://en.wikipedia.org/wiki/Special:Random",
-            image: this.state.image || "https://source.unsplash.com/random/" + (this.state.students.length + 1),
+            image: this.state.image || "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif",
         });
         this.reset()
     }

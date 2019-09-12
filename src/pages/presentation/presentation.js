@@ -20,6 +20,7 @@ class PresentationPage extends React.Component {
         }
     }
 
+
     async componentDidMount() {
         const students = await getStudents(); // get from back end
         const data = [
@@ -37,14 +38,15 @@ class PresentationPage extends React.Component {
         await this.setState({students, data});
 
         // get from backend
-        let idx = 0
+        let idx = 0;
         await this.changeURL(idx)
         idx++;
 
         this.interval = setInterval(async () => {
             await this.changeURL(idx)
             idx++
-        }, 10000)
+        }, 15000)
+
     }
     componentWillUnmount() {
         clearInterval(this.timerID);
@@ -63,7 +65,7 @@ class PresentationPage extends React.Component {
             });
             if (idx !== this.state.students.length)
                 await postPresentingStudent(this.state.students[idx])
-        }, 1000);
+        }, 5000);
 
         this.timerID = setInterval(
             () => {
@@ -92,7 +94,7 @@ class PresentationPage extends React.Component {
             modalOpen: false,
             student: this.state.students[idx],
             currentUrl: this.state.students[idx].url,
-            countdown: 6,
+            countdown: 10,
         })
     }
 
@@ -101,6 +103,7 @@ class PresentationPage extends React.Component {
             success={(user) => this.setState({user})}
         /> : <div>
                 <div className="header">
+                    <button>Start</button>
                     <table>
                         <thead>
                         <tr>
