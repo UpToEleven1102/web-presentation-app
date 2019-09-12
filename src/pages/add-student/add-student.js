@@ -42,7 +42,7 @@ class AddStudentPage extends Component {
     }
 
     editStudent = (student) => {
-        this.setState({modalOpen: true, student: student})
+        this.setState({modalOpen: true, student: student.id})
     };
 
     render() {
@@ -91,8 +91,12 @@ class AddStudentPage extends Component {
                                 <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.name}</td>
                                 <td>{student.url}</td>
-                                <td><button onClick={() => this.editStudent(student)} type={'button'} className={'btn' +
-                                ' btn-success'}>Edit</button></td>
+                                <td>
+                                    <button onClick={() => this.editStudent(student)}
+                                            type={'button'}
+                                            className={'btn' +
+                                ' btn-info'}>
+                                        </button></td>
                             </tr>
                         ))}
                         </tbody>
@@ -103,7 +107,9 @@ class AddStudentPage extends Component {
                     isOpen={this.state.modalOpen}
                 >
                     <p>{JSON.stringify(this.state.student)}</p>
-                    <button onClick={() => this.setState({modalOpen: false})}>Cancel</button>
+                    <button
+                        onClick={() => this.setState({modalOpen: false})}
+                    >Cancel</button>
                     <button >Submit</button>
                 </Modal>
             </div>

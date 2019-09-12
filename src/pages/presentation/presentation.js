@@ -20,9 +20,14 @@ class PresentationPage extends React.Component {
         }
     }
 
+    presentLength = 10;
 
-    async componentDidMount() {
+    async componentDidMount(){
         const students = await getStudents(); // get from back end
+        await this.setState({students});
+    }
+    async startHere(index) {
+        let idx = index-1;
         const data = [
             {x: 0, y: 8},
             {x: 1, y: 5},
@@ -35,10 +40,10 @@ class PresentationPage extends React.Component {
             {x: 8, y: 2},
             {x: 9, y: 0}
         ];
-        await this.setState({students, data});
+        await this.setState({data});
+        await console.log(this.state);
 
         // get from backend
-        let idx = 0;
         await this.changeURL(idx)
         idx++;
 
@@ -99,17 +104,19 @@ class PresentationPage extends React.Component {
     }
 
     render() {
-        const content = !this.state.user ? <LoginPage
-            success={(user) => this.setState({user})}
-        /> : <div>
+        // const content = !this.state.user ? <LoginPage
+        //     success={(user) => this.setState({user})}
+        // /> :
+        return (
+            <div>
                 <div className="header">
-                    <button>Start</button>
+
                     <table>
                         <thead>
                         <tr>
                             <th scope="col">id</th>
-                            <th scope="col">Image</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Image</th>
                             <th scope="col">URL</th>
                             <th scope="col"></th>
                         </tr>
@@ -118,10 +125,16 @@ class PresentationPage extends React.Component {
                         {this.state.students.map(student => (
                             <tr key={student.id}>
                                 <th scope="row">{student.id}</th>
-                                <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.name}</td>
+                                <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.url}</td>
-                                <td>{'Timer here'}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        onClick={() => this.startHere(student.id)}
+                                        >
+                                        Start</button></td>
                             </tr>
                         ))}
                         </tbody>
@@ -151,37 +164,36 @@ class PresentationPage extends React.Component {
                                     "EXPRIRED"} </p>
                                 </div>
                                 <div>
-                                    <XYPlot height={200} width={250}>
-                                        <HorizontalGridLines style={{stroke: '#B7E9ED'}} />
-                                        <VerticalGridLines style={{stroke: '#B7E9ED'}} />
-                                        <XAxis
-                                            title="X Axis"
-                                            style={{
-                                                line: {stroke: '#ADDDE1'},
-                                                ticks: {stroke: '#ADDDE1'},
-                                                text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}
-                                            }}
-                                        />
-                                        <LineSeries
-                                            curve={curveCatmullRom.alpha(0.5)}
-                                            data={this.state.data}
-                                        />
-                                    </XYPlot>
+                                    {/*<XYPlot height={200} width={250}>*/}
+                                        {/*<HorizontalGridLines style={{stroke: '#B7E9ED'}} />*/}
+                                        {/*<VerticalGridLines style={{stroke: '#B7E9ED'}} />*/}
+                                        {/*<XAxis*/}
+                                            {/*title="X Axis"*/}
+                                            {/*style={{*/}
+                                                {/*line: {stroke: '#ADDDE1'},*/}
+                                                {/*ticks: {stroke: '#ADDDE1'},*/}
+                                                {/*text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}*/}
+                                            {/*}}*/}
+                                        {/*/>*/}
+                                        {/*<LineSeries*/}
+                                            {/*curve={curveCatmullRom.alpha(0.5)}*/}
+                                            {/*data={this.state.data}*/}
+                                        {/*/>*/}
+                                    {/*</XYPlot>*/}
                                 </div>
                             </div>
                         </div>
-
 
                     </Modal>
                 </div>
             </div>
 
-        return (
-            <Fragment>
-                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    {content}
-                </div>
-            </Fragment>
+        // return (
+        //     <Fragment>
+        //         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        //             {content}
+        //         </div>
+        //     </Fragment>
 
         )
     }
