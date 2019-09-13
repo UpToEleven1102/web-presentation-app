@@ -22,7 +22,7 @@ class PresentationPage extends React.Component {
         }
     }
 
-    presentLength = 10;
+    presentLength = 15;
 
     async componentDidMount() {
         const students = await getStudents(); // get from back end
@@ -53,8 +53,7 @@ class PresentationPage extends React.Component {
         this.interval = setInterval(async () => {
             await this.changeURL(idx)
             idx++
-        }, 90000)
-
+        }, this.presentLength*1000)
     }
 
     componentWillUnmount() {
@@ -75,7 +74,7 @@ class PresentationPage extends React.Component {
             });
             if (idx !== this.state.students.length)
                 await postPresentingStudent(this.state.students[idx])
-        }, 1000);
+        }, 10);
 
         this.timerID = setInterval(
             () => {
