@@ -97,6 +97,7 @@ class PresentationPage extends React.Component {
             })
             clearTimeout(this.timeOut)
             clearInterval(this.interval)
+            clearTimeout(this.timerID)
             // alert('Done')
             return
         }
@@ -163,6 +164,7 @@ class PresentationPage extends React.Component {
                                             <button
                                                 onClick={() => {
                                                     this.setState({modalOpen: false})
+                                                    postPresentingStudent({})
                                                     clearTimeout(this.timeOut)
                                                     clearInterval(this.interval)
                                                 }}
