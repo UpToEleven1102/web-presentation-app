@@ -94,8 +94,8 @@ class AddStudentPage extends Component {
                                 <td>
                                     <button onClick={() => this.editStudent(student)}
                                             type={'button'}
-                                            className={'btn' +
-                                ' btn-info'}>
+                                            className={'btn btn-sm' +
+                                ' btn-outline-dark'}>Edit
                                         </button></td>
                             </tr>
                         ))}

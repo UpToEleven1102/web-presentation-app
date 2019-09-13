@@ -11,3 +11,29 @@
     max-width: 250px;
     width: auto;
 }
+/*th {*/
+    /*background-color:;*/
+    /*color: white;*/
+/*}*/
+
+/*.table-striped>tbody>tr:nth-child(odd)>td,*/
+/*.table-striped>tbody>tr:nth-child(odd)>th {*/
+    /*background-color: #f8f8f8;*/
+/*}*/
+
+.table-hover tbody tr:hover td {
+    background: rgb(191, 225, 239);
+    transition: 0.3s;
+}
+
+.btn-circle {
+    background-color: #ed665d;
+    border-color: #dc4d5a;
+    width: 30px;
+    height: 30px;
+    padding: 0px 0px;
+    border-radius: 15px;
+    text-align: center;
+    line-height: 0;
+    color: black;
+}
