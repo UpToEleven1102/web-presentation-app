@@ -8,7 +8,8 @@ class ScoringPage extends React.Component {
         this.state = {
             students: [],
             presenting_student: null,
-            name: ''
+            name: '',
+            student: {}
         }
     }
 
@@ -28,8 +29,19 @@ class ScoringPage extends React.Component {
         await this.setState({presenting_student: presenting_student})
     }
 
-    setUser = () => {
-        this.setState({student: {name: this.state.name}})
+    setUser = (e) => {
+        e.preventDefault()
+        if (!this.state.student.name) {
+            if (this.state.students.filter(student => student.name === this.state.name).length > 0) {
+                this.setState({student: {name: this.state.name}})
+                return
+            } else {
+                alert("Wrong name")
+            }
+        }
+
+        alert(`Submit ${this.state.student.name} to server`)
+        // submit scores here
     }
 
     render() {
@@ -37,16 +49,15 @@ class ScoringPage extends React.Component {
             <div className={"container"}>
                 <h3 className={"row"}>{"Current presenter: " + this.state.presenting_student.name}</h3>
                 <div className={"row"}>
-            <Iframe
-                width={'100%'}
-                height={'500px'}
-                url={this.state.presenting_student.url}
-            />
+                    <Iframe
+                        width={'100%'}
+                        height={'500px'}
+                        url={this.state.presenting_student.url}
+                    />
                 </div>
-            { !this.state.student &&
                 <div className={"row"} style={{marginTop: "30px"}}>
                     {/*<input type="text" placeholder={'name'}*/}
-                           {/*onChange={e => this.setState({name: e.target.value})}/>*/}
+                    {/*onChange={e => this.setState({name: e.target.value})}/>*/}
                     {/*<button onClick={this.setUser}>Submit</button>*/}
                     <form>
                         <div className="form-group row">
@@ -56,124 +67,121 @@ class ScoringPage extends React.Component {
                                        id="colFormLabel"
                                        placeholder="Full name"
                                        onChange={e => this.setState({name: e.target.value})}
+                                       disabled={!!this.state.student.name}
                                        required/>
                             </div>
                         </div>
                         {/*checkboxes*/}
-                        <fieldset className="form-group">
-                            <div className="row" style={{marginTop: "30px"}}>
-                                <legend className="col-form-label col-lg-10 pt-0">Functionality</legend>
-                                <div className="col-sm-10">
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio1" value="option1"/>
+                        {
+                            this.state.student.name &&
+                            <fieldset className="form-group">
+                                <div className="row" style={{marginTop: "30px"}}>
+                                    <legend className="col-form-label col-lg-10 pt-0">Functionality</legend>
+                                    <div className="col-sm-10">
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_1"
+                                                   id="inlineRadio1" value="option1"/>
                                             <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_1"
+                                                   id="inlineRadio2" value="option2"/>
                                             <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">3</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">4</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">5</label>
-                                    </div>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_1"
+                                                   id="inlineRadio3" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio3">3</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_1"
+                                                   id="inlineRadio4" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio4">4</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_1"
+                                                   id="inlineRadio5" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio5">5</label>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            {/* ---------- 2 ------------ */}
-                            <div className="row" style={{marginTop: "30px"}}>
-                                <legend className="col-form-label col-lg-10 pt-0">User friendly</legend>
-                                <div className="col-sm-10">
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio1" value="option1"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">3</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">4</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">5</label>
-                                    </div>
+                                {/* ---------- 2 ------------ */}
+                                <div className="row" style={{marginTop: "30px"}}>
+                                    <legend className="col-form-label col-lg-10 pt-0">User friendly</legend>
+                                    <div className="col-sm-10">
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_2"
+                                                   id="inlineRadio1" value="option1"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio1">1</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_2"
+                                                   id="inlineRadio2" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio2">2</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_2"
+                                                   id="inlineRadio3" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio3">3</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_2"
+                                                   id="inlineRadio4" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio4">4</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_2"
+                                                   id="inlineRadio5" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio5">5</label>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            {/* ---------- 3 ------------ */}
-                            <div className="row" style={{marginTop: "30px"}}>
-                                <legend className="col-form-label col-lg-10 pt-0">Visual appealing</legend>
-                                <div className="col-sm-10">
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio1" value="option1"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">3</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">4</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="inlineRadioOptions"
-                                               id="inlineRadio2" value="option2"/>
-                                        <label className="form-check-label" htmlFor="inlineRadio2">5</label>
-                                    </div>
+                                {/* ---------- 3 ------------ */}
+                                <div className="row" style={{marginTop: "30px"}}>
+                                    <legend className="col-form-label col-lg-10 pt-0">Visual appealing</legend>
+                                    <div className="col-sm-10">
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_3"
+                                                   id="inlineRadio1" value="option1"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio1">1</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_3"
+                                                   id="inlineRadio2" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio2">2</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_3"
+                                                   id="inlineRadio2" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio2">3</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_3"
+                                                   id="inlineRadio2" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio2">4</label>
+                                        </div>
+                                        <div className="form-check form-check-inline">
+                                            <input className="form-check-input" type="radio" name="criteria_3"
+                                                   id="inlineRadio2" value="option2"/>
+                                            <label className="form-check-label" htmlFor="inlineRadio2">5</label>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
 
 
-                        </fieldset>
-                        <button className="btn btn-success" type="submit" onClick={this.setUser}>Submit</button>
+                            </fieldset>
+                        }
+                        <button className="btn btn-success" style={{marginBottom: "50px"}}
+                                onClick={this.setUser}>Submit
+                        </button>
                     </form>
                 </div>
-
-            }
-            { this.state.student &&
-                <div>
-                    <p>Your name: {this.state.student.name}</p>
-                    <p>show score based on state.student.name and presenting_student.id -
-                        {this.state.student.name} & {this.state.presenting_student.id}</p>
-                </div>
-            }
-        </div> : <div>
-            <p>No presentation.</p>
-        </div>
+            </div> : <div>
+                <p>No presentation.</p>
+            </div>
 
         return (
             <Fragment>

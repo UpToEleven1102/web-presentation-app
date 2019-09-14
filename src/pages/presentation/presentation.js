@@ -18,11 +18,11 @@ class PresentationPage extends React.Component {
             nextStudent: 0,
             modalOpen: false,
             countdown: 0,
-
+            data: null
         }
     }
 
-    presentLength = 90;
+    presentLength = 10;
 
     async componentDidMount() {
         const students = await getStudents(); // get from back end
@@ -44,7 +44,6 @@ class PresentationPage extends React.Component {
             {x: 9, y: 0}
         ];
         await this.setState({data});
-        await console.log(this.state);
 
         // get from backend
         await this.changeURL(idx)
@@ -56,16 +55,23 @@ class PresentationPage extends React.Component {
         }, this.presentLength*1000)
     }
 
+    closeModal = () => {
+        this.setState({modalOpen: false})
+        postPresentingStudent({})
+        clearTimeout(this.timeOut)
+        clearInterval(this.interval)
+        clearInterval(this.timerID)
+    }
+
     componentWillUnmount() {
         clearInterval(this.timerID);
     }
 
-    tick() {
-        this.setState((state) => ({
-            countdown: state.countdown - 1
-        }));
+    tick = () => {
+        this.setState((prevState) => {
+            return { countdown: prevState.countdown - 1}
+        })
     }
-
     changeURL = async (idx) => {
         this.timeOut = setTimeout(async () => {
             // open modal
@@ -81,6 +87,7 @@ class PresentationPage extends React.Component {
             () => {
                 this.tick();
                 if (this.state.countdown < 1) {
+                    console.log("check")
                     clearInterval(this.timerID);
                 }
             },
@@ -163,12 +170,7 @@ class PresentationPage extends React.Component {
                                     <td style={{width: "200px"}}>
                                         <div>
                                             <button
-                                                onClick={() => {
-                                                    this.setState({modalOpen: false})
-                                                    postPresentingStudent({})
-                                                    clearTimeout(this.timeOut)
-                                                    clearInterval(this.interval)
-                                                }}
+                                                onClick={this.closeModal}
                                                 className={'float-right btn btn-danger btn-circle'}>
                                                 <span style={{fontSize: "25px", padding: "0"}}>&times;</span></button>
                                         </div>
