@@ -51,48 +51,36 @@ class PresentationPage extends React.Component {
 
         this.interval = setInterval(async () => {
             await this.changeURL(idx);
-            idx++
+            idx++;
         }, this.presentLength*1000)
+
+        this.timerID = setInterval(
+            () => {
+                console.log("timerID: ", this.timerID);
+                this.setState((prevState) => {
+                    return { countdown: prevState.countdown - 1}
+                });
+            },
+            1000
+        );
     }
 
     closeModal = () => {
         this.setState({modalOpen: false})
         postPresentingStudent({})
-        clearTimeout(this.timeOut)
         clearInterval(this.interval)
         clearInterval(this.timerID)
+        console.log("clearInterval(this.timerID) at closeModal")
+
     }
 
     componentWillUnmount() {
+        console.log("clearInterval(this.timerID) at componentWillUnmount")
         clearInterval(this.timerID);
+        clearInterval(this.interval)
     }
 
-    tick = () => {
-        this.setState((prevState) => {
-            return { countdown: prevState.countdown - 1}
-        })
-    }
     changeURL = async (idx) => {
-        this.timeOut = setTimeout(async () => {
-            // open modal
-            this.setState({
-                modalOpen: true
-            });
-
-            if (idx !== this.state.students.length)
-                await postPresentingStudent(this.state.students[idx])
-        }, 10);
-
-        this.timerID = setInterval(
-            () => {
-                this.tick();
-                if (this.state.countdown < 1) {
-                    console.log("check")
-                    clearInterval(this.timerID);
-                }
-            },
-            1000
-        );
 
         await postPresentingStudent({});
 
@@ -103,12 +91,14 @@ class PresentationPage extends React.Component {
                 student: null,
                 currentUrl: '',
             })
-            clearTimeout(this.timeOut)
             clearInterval(this.interval)
-            clearTimeout(this.timerID)
+            clearInterval(this.timerID)
+            console.log("clearInterval(this.timerID) at reachedLength")
+
             // alert('Done')
             return
         }
+
         this.setState({
             modalOpen: false,
             student: this.state.students[idx],
@@ -116,6 +106,14 @@ class PresentationPage extends React.Component {
             countdown: this.presentLength,
             nextStudent: this.state.students[idx + 1]
         })
+
+        this.setState({
+            modalOpen: true
+        });
+        console.log((new Date()).getSeconds())
+
+        if (idx !== this.state.students.length)
+            await postPresentingStudent(this.state.students[idx])
     };
 
     render() {
@@ -182,7 +180,8 @@ class PresentationPage extends React.Component {
                                         width="100%"
                                         height='1000px'
                                     /></td>
-                                    <td><h1>{this.state.countdown ?
+                                    <td>
+                                        <h1>{this.state.countdown > 0 ?
                                         ("Time left: " + this.state.countdown + "\n seconds") :
                                         "EXPRIRED"} </h1>
 

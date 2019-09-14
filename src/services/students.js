@@ -28,6 +28,7 @@ function getPresentingStudent() {
 }
 
 function postPresentingStudent(student) {
+    console.log("posting")
     return postData(`${uri}/students/presenting`, student)
 }
 
