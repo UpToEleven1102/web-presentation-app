@@ -7,6 +7,7 @@ import {curveCatmullRom} from 'd3-shape'
 import {getStudents, postPresentingStudent} from "../../services/students";
 import './presentation.css';
 import LoginPage from "../signin/signin";
+import {getAvgScoreByPresenterID} from "../../services/score";
 
 class PresentationPage extends React.Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class PresentationPage extends React.Component {
         this.state = {
             currentUrl: 'www.google.com',
             students: [],
-            student: 0,
+            student: null,
             nextStudent: 0,
             modalOpen: false,
             countdown: 0,
@@ -22,28 +23,53 @@ class PresentationPage extends React.Component {
         }
     }
 
-    presentLength = 10;
+    presentLength = 50;
 
     async componentDidMount() {
         const students = await getStudents(); // get from back end
         await this.setState({students});
     }
 
+    componentWillUnmount() {
+        console.log("clearInterval(this.timerID) at componentWillUnmount")
+        clearInterval(this.timerID);
+        clearInterval(this.interval);
+        clearInterval(this.scoreInterval);
+    }
+
+    async getScores () {
+        const score = await getAvgScoreByPresenterID(this.state.student.id)
+        await this.setState({
+            student: {...this.state.student, score: score},
+            students: this.state.students.map(student => {
+                if (student.id === score.presenter_id) {
+                    student.score = score
+                }
+                return student
+            })
+        })
+
+        if (score) {
+            const data = [
+                {x: 0, y: 8},
+                {x: 1, y: 5},
+                {x: 2, y: 4},
+                {x: 3, y: 9},
+                {x: 4, y: 1},
+                {x: 5, y: 7},
+                {x: 6, y: 6},
+                {x: 7, y: 3},
+                {x: 8, y: 2},
+                {x: 9, y: 0}
+            ];
+            await this.setState({data});
+        } else {
+            this.setState({data:null})
+        }
+    }
+
     async startHere(index) {
         let idx = index - 1;
-        const data = [
-            {x: 0, y: 8},
-            {x: 1, y: 5},
-            {x: 2, y: 4},
-            {x: 3, y: 9},
-            {x: 4, y: 1},
-            {x: 5, y: 7},
-            {x: 6, y: 6},
-            {x: 7, y: 3},
-            {x: 8, y: 2},
-            {x: 9, y: 0}
-        ];
-        await this.setState({data});
 
         // get from backend
         await this.changeURL(idx)
@@ -60,30 +86,24 @@ class PresentationPage extends React.Component {
                 this.setState((prevState) => {
                     return { countdown: prevState.countdown - 1}
                 });
+                if (this.state.student) {
+                    this.getScores()
+                }
             },
             1000
         );
     }
 
     closeModal = () => {
-        this.setState({modalOpen: false})
+        this.setState({modalOpen: false, student: null})
         postPresentingStudent({})
         clearInterval(this.interval)
         clearInterval(this.timerID)
         console.log("clearInterval(this.timerID) at closeModal")
-
-    }
-
-    componentWillUnmount() {
-        console.log("clearInterval(this.timerID) at componentWillUnmount")
-        clearInterval(this.timerID);
-        clearInterval(this.interval)
     }
 
     changeURL = async (idx) => {
-
         await postPresentingStudent({});
-
         if (idx === this.state.students.length) {
             // reach end of list
             this.setState({
@@ -131,6 +151,7 @@ class PresentationPage extends React.Component {
                             <th scope="col">Name</th>
                             <th scope="col">Image</th>
                             <th scope="col">URL</th>
+                            <th scope="col">Score</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>
@@ -141,6 +162,7 @@ class PresentationPage extends React.Component {
                                 <td>{student.name}</td>
                                 <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.url}</td>
+                                <td>{JSON.stringify(student.score)}</td>
                                 <td>
                                     <button
                                         type="button"
@@ -153,7 +175,6 @@ class PresentationPage extends React.Component {
                             </tr>
                         ))}
                         </tbody>
-
                     </table>
                     <Modal
                         isOpen={this.state.modalOpen}
@@ -184,23 +205,27 @@ class PresentationPage extends React.Component {
                                         <h1>{this.state.countdown > 0 ?
                                         ("Time left: " + this.state.countdown + "\n seconds") :
                                         "EXPRIRED"} </h1>
+                                        {
+                                            this.state.student && this.state.student.score ? <XYPlot height={200} width={200}>
+                                                <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
+                                                <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
+                                                <XAxis
+                                                    title="X Axis"
+                                                    style={{
+                                                        line: {stroke: '#ADDDE1'},
+                                                        ticks: {stroke: '#ADDDE1'},
+                                                        text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}
+                                                    }}
+                                                />
+                                                <LineSeries
+                                                    curve={curveCatmullRom.alpha(0.5)}
+                                                    data={this.state.data}
+                                                />
+                                            </XYPlot> : <div>
+                                                <p>No scores recorded</p>
+                                            </div>
+                                        }
 
-                                        <XYPlot height={200} width={200}>
-                                            <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
-                                            <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
-                                            <XAxis
-                                                title="X Axis"
-                                                style={{
-                                                    line: {stroke: '#ADDDE1'},
-                                                    ticks: {stroke: '#ADDDE1'},
-                                                    text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}
-                                                }}
-                                            />
-                                            <LineSeries
-                                                curve={curveCatmullRom.alpha(0.5)}
-                                                data={this.state.data}
-                                            />
-                                        </XYPlot>
                                     </td>
                                 </tr>
 

@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react'
 import Iframe from "react-iframe";
 import {getPresentingStudent, getStudents} from "../../services/students";
+import {postScore} from "../../services/score";
 
 class ScoringPage extends React.Component {
     constructor(props) {
@@ -8,14 +9,35 @@ class ScoringPage extends React.Component {
         this.state = {
             students: [],
             presenting_student: null,
-            name: '',
-            student: {}
+            id: '',
+            score: {}
         }
     }
 
+    criteria = [
+        {
+            name: 'criteria_1',
+            values: [
+                1, 2, 3, 4
+            ]
+        },
+        {
+            name: 'criteria_2',
+            values: [
+                1, 2, 3, 4
+            ]
+        },
+        {
+            name: 'criteria_3',
+            values: [
+                1, 2, 3, 4
+            ]
+        },
+    ]
+
     async componentDidMount() {
         const students = await getStudents()
-        await this.setState({students})
+        await this.setState({students: students})
         await this.getPresentingStudent()
         this.interval = setInterval(this.getPresentingStudent, 1000)
     }
@@ -27,25 +49,32 @@ class ScoringPage extends React.Component {
     getPresentingStudent = async () => {
         const presenting_student = await getPresentingStudent()
         await this.setState({presenting_student: presenting_student})
+        console.log(this.state.presenting_student)
     }
 
-    setUser = (e) => {
-        e.preventDefault()
-        if (!this.state.student.name) {
-            if (this.state.students.filter(student => student.name === this.state.name).length > 0) {
-                this.setState({student: {name: this.state.name}})
-                return
-            } else {
-                alert("Wrong name")
+    setUser = async () => {
+        if (this.state.id.length === 0 || parseInt(this.state.id) < 1 || parseInt(this.state.id) > 81) {
+            alert('Wrong ID')
+        } else {
+            for (let c of this.criteria) {
+                if (!this.state.score[c.name]) {
+                    alert(c.name + ' missing')
+                    return
+                }
             }
-        }
 
-        alert(`Submit ${this.state.student.name} to server`)
-        // submit scores here
+            const payload = {
+                user_id: parseInt(this.state.id),
+                presenter_id: this.state.presenting_student.id,
+                ...this.state.score
+            }
+            const res = await postScore(payload)
+            alert('Submited score for ' + this.state.presenting_student.name)
+        }
     }
 
     render() {
-        const content = this.state.presenting_student && this.state.presenting_student.id ?
+        const content = (this.state.presenting_student && this.state.presenting_student.id) ?
             <div className={"container"}>
                 <h3 className={"row"}>{"Current presenter: " + this.state.presenting_student.name}</h3>
                 <div className={"row"}>
@@ -56,130 +85,40 @@ class ScoringPage extends React.Component {
                     />
                 </div>
                 <div className={"row"} style={{marginTop: "30px"}}>
-                    {/*<input type="text" placeholder={'name'}*/}
-                    {/*onChange={e => this.setState({name: e.target.value})}/>*/}
-                    {/*<button onClick={this.setUser}>Submit</button>*/}
-                    <form>
+                    <div>
                         <div className="form-group row">
-                            <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">Full name</label>
+                            <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">ID</label>
                             <div className="col-sm-10">
-                                <input type="text" className="form-control"
+                                <input type="number" className="form-control"
+                                       value={this.state.id}
                                        id="colFormLabel"
-                                       placeholder="Full name"
-                                       onChange={e => this.setState({name: e.target.value})}
-                                       disabled={!!this.state.student.name}
+                                       placeholder="ID"
+                                       onChange={e => this.setState({id: e.target.value})}
                                        required/>
                             </div>
                         </div>
                         {/*checkboxes*/}
-                        {
-                            this.state.student.name &&
-                            <fieldset className="form-group">
-                                <div className="row" style={{marginTop: "30px"}}>
-                                    <legend className="col-form-label col-lg-10 pt-0">Functionality</legend>
-                                    <div className="col-sm-10">
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_1"
-                                                   id="inlineRadio1" value="option1"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_1"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_1"
-                                                   id="inlineRadio3" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio3">3</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_1"
-                                                   id="inlineRadio4" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio4">4</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_1"
-                                                   id="inlineRadio5" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio5">5</label>
-                                        </div>
-
-                                    </div>
+                        <fieldset className="form-group">
+                            {this.criteria.map(c => <div key={c.name} className="row" style={{marginTop: "30px"}}>
+                                <legend className="col-form-label col-lg-10 pt-0">{c.name}</legend>
+                                <div className="col-sm-10">
+                                    {c.values.map(v => <div key={v} className="form-check form-check-inline">
+                                        <input className="form-check-input" type="radio" name={c.name}
+                                               id={c.name+v} value={v} onChange={() => {
+                                                   this.setState({score: {...this.state.score, [c.name]: v}})
+                                        }}/>
+                                        <label className="form-check-label" htmlFor={c.name+v}>{v}</label>
+                                    </div>)}
                                 </div>
-                                {/* ---------- 2 ------------ */}
-                                <div className="row" style={{marginTop: "30px"}}>
-                                    <legend className="col-form-label col-lg-10 pt-0">User friendly</legend>
-                                    <div className="col-sm-10">
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_2"
-                                                   id="inlineRadio1" value="option1"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_2"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_2"
-                                                   id="inlineRadio3" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio3">3</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_2"
-                                                   id="inlineRadio4" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio4">4</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_2"
-                                                   id="inlineRadio5" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio5">5</label>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                {/* ---------- 3 ------------ */}
-                                <div className="row" style={{marginTop: "30px"}}>
-                                    <legend className="col-form-label col-lg-10 pt-0">Visual appealing</legend>
-                                    <div className="col-sm-10">
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_3"
-                                                   id="inlineRadio1" value="option1"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio1">1</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_3"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">2</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_3"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">3</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_3"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">4</label>
-                                        </div>
-                                        <div className="form-check form-check-inline">
-                                            <input className="form-check-input" type="radio" name="criteria_3"
-                                                   id="inlineRadio2" value="option2"/>
-                                            <label className="form-check-label" htmlFor="inlineRadio2">5</label>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                            </fieldset>
-                        }
+                            </div>)}
+                        </fieldset>
                         <button className="btn btn-success" style={{marginBottom: "50px"}}
                                 onClick={this.setUser}>Submit
                         </button>
-                    </form>
+                    </div>
                 </div>
-            </div> : <div>
+            </div> :
+            <div>
                 <p>No presentation.</p>
             </div>
 

@@ -23,6 +23,10 @@ function getStudents() {
     return getData(`${uri}/students`)
 }
 
+function postStudent(student) {
+    return postData(`${uri}/students`, student)
+}
+
 function getPresentingStudent() {
     return getData(`${uri}/students/presenting`)
 }
@@ -32,11 +36,9 @@ function postPresentingStudent(student) {
     return postData(`${uri}/students/presenting`, student)
 }
 
-function postStudent(student) {
-    return postData(`${uri}/students`, student)
-}
-
 export {
+    postData,
+    getData,
     getStudents,
     postStudent,
     getPresentingStudent,
