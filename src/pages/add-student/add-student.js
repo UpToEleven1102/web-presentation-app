@@ -81,6 +81,8 @@ class AddStudentPage extends Component {
                             <th scope="col">Image</th>
                             <th scope="col">Name</th>
                             <th scope="col">URL</th>
+                            <th scope="col">Score</th>
+                            <th scope="col">Contribution</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -91,6 +93,8 @@ class AddStudentPage extends Component {
                                 <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
                                 <td>{student.name}</td>
                                 <td>{student.url}</td>
+                                <td>{JSON.stringify(student.score)}</td>
+                                <td>{student.num_scored}</td>
                                 <td>
                                     <button onClick={() => this.editStudent(student)}
                                             type={'button'}
