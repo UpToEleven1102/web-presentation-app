@@ -39,7 +39,9 @@ class PresentationPage extends React.Component {
 
     async getScores () {
         const score = await getAvgScoreByPresenterID(this.state.student.id)
+
         console.log('score ', score)
+
         await this.setState({
             student: {...this.state.student, score: score},
             students: this.state.students.map(student => {
@@ -51,7 +53,7 @@ class PresentationPage extends React.Component {
         })
 
         if (score) {
-            let keys = Object.keys(score).filter(d => d.indexOf("criteria") >= 0);
+            const keys = Object.keys(score).filter(d => d.indexOf("criteria") >= 0);
 
             let data = keys.map((d,i) => {
                 return {
@@ -128,17 +130,16 @@ class PresentationPage extends React.Component {
         this.setState({
             modalOpen: true
         });
-        console.log((new Date()).getSeconds())
 
         if (idx !== this.state.students.length)
             await postPresentingStudent(this.state.students[idx])
     };
 
     render() {
-        // const content = !this.state.user ? <LoginPage
-        //     success={(user) => this.setState({user})}
-        // /> :
-        return(
+        const content = !this.state.user ? <LoginPage
+            success={(user) => this.setState({user})}
+        /> :
+        // return(
             <div>
                 <div className="header m-3">
                     <h2 className={"display-4 pb-3"}>Presentation list</h2>
@@ -154,6 +155,7 @@ class PresentationPage extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
+
                         {this.state.students.map(student => (
                             <tr key={student.id}>
                                 <td scope="row">{student.id}</td>
@@ -165,7 +167,9 @@ class PresentationPage extends React.Component {
                                     <button
                                         type="button"
                                         className="btn btn-primary"
-                                        onClick={() => this.startHere(student.id)}
+                                        onClick={() => {
+                                            return this.startHere(student.id)
+                                        }}
                                     >
                                         Start
                                     </button>
@@ -209,7 +213,7 @@ class PresentationPage extends React.Component {
                                                 <XYPlot height={200} width={200}>
                                                     <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
                                                     <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
-                                                    <XAxis hideLine tickValues={[1, 2, 3, 4, 5]} tickFormat={v => parseInt(v)} title="X"/>
+                                                    <XAxis hideLine tickValues={[0, 1, 2]} tickFormat={v => parseInt(v) + 1}/>
 
                                                     <YAxis hideTicks/>
                                                     <YAxis
@@ -253,12 +257,12 @@ class PresentationPage extends React.Component {
                     </Modal>
                 </div>
             </div>
-            // return (
-            //     <Fragment>
-            //         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            //             {content}
-            //         </div>
-            //     </Fragment>
+            return (
+                <Fragment>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        {content}
+                    </div>
+                </Fragment>
         )
     }
 }
