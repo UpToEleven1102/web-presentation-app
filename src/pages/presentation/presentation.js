@@ -137,10 +137,9 @@ class PresentationPage extends React.Component {
     };
 
     render() {
-        // const content = !this.state.user ? <LoginPage
-        //     success={(user) => this.setState({user})}
-        // /> :
-        return (
+        const content = !this.state.user ? <LoginPage
+            success={(user) => this.setState({user})}
+        /> :
             <div>
                 <div className="header m-3">
                     <h2 className={"display-4 pb-3"}>Presentation list</h2>
@@ -247,14 +246,12 @@ class PresentationPage extends React.Component {
                     </Modal>
                 </div>
             </div>
-
-            // return (
-            //     <Fragment>
-            //         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            //             {content}
-            //         </div>
-            //     </Fragment>
-
+            return (
+                <Fragment>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        {content}
+                    </div>
+                </Fragment>
         )
     }
 }
