@@ -39,6 +39,7 @@ class PresentationPage extends React.Component {
 
     async getScores () {
         const score = await getAvgScoreByPresenterID(this.state.student.id)
+        console.log('score ', score)
         await this.setState({
             student: {...this.state.student, score: score},
             students: this.state.students.map(student => {

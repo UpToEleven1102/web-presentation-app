@@ -5,7 +5,7 @@ const uri = config.uri;
 function getData(url) {
     return fetch(url).then(res => {
         const contentType = res.headers.get('content-type')
-        return contentType && contentType.indexOf('json') ? res.json() : res
+        return contentType && contentType.indexOf('json') ? res.json() : res.text()
     })
 }
 

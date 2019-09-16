@@ -12,7 +12,7 @@ const getScores = () => {
 }
 
 const getAvgScoreByPresenterID = id => {
-    return getData(`${uri}/scores/` + id)
+    return getData(`${uri}/scores/` + id).then(res => res)
 }
 
 export {
