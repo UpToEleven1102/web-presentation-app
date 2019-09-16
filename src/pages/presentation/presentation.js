@@ -2,7 +2,7 @@ import React, {Fragment} from 'react'
 import Modal from 'react-modal'
 import Iframe from "react-iframe";
 
-import {XYPlot, LineSeries, XAxis, YAxis, HorizontalGridLines, VerticalGridLines} from 'react-vis'
+import {XYPlot, LineSeries, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, VerticalBarSeries} from 'react-vis'
 import {curveCatmullRom} from 'd3-shape'
 import {getStudents, postPresentingStudent} from "../../services/students";
 import './presentation.css';
@@ -23,7 +23,7 @@ class PresentationPage extends React.Component {
         }
     }
 
-    presentLength = 50;
+    presentLength = 20;
 
     async componentDidMount() {
         const students = await getStudents(); // get from back end
@@ -51,18 +51,15 @@ class PresentationPage extends React.Component {
         })
 
         if (score) {
-            const data = [
-                {x: 0, y: 8},
-                {x: 1, y: 5},
-                {x: 2, y: 4},
-                {x: 3, y: 9},
-                {x: 4, y: 1},
-                {x: 5, y: 7},
-                {x: 6, y: 6},
-                {x: 7, y: 3},
-                {x: 8, y: 2},
-                {x: 9, y: 0}
-            ];
+            let keys = Object.keys(score).filter(d => d.indexOf("criteria") >= 0);
+
+            let data = keys.map((d,i) => {
+                return {
+                    x: i,
+                    y: score[d]
+                }
+            })
+
             await this.setState({data});
         } else {
             this.setState({data:null})
@@ -138,9 +135,10 @@ class PresentationPage extends React.Component {
     };
 
     render() {
-        const content = !this.state.user ? <LoginPage
-            success={(user) => this.setState({user})}
-        /> :
+        // const content = !this.state.user ? <LoginPage
+        //     success={(user) => this.setState({user})}
+        // /> :
+        return(
             <div>
                 <div className="header m-3">
                     <h2 className={"display-4 pb-3"}>Presentation list</h2>
@@ -203,27 +201,35 @@ class PresentationPage extends React.Component {
                                     /></td>
                                     <td>
                                         <h1>{this.state.countdown > 0 ?
-                                        ("Time left: " + this.state.countdown + "\n seconds") :
-                                        "EXPRIRED"} </h1>
+                                            ("Time left: \u00A0" + this.state.countdown + "\n secs") :
+                                            "EXPRIRED"} </h1>
                                         {
-                                            this.state.student && this.state.student.score ? <XYPlot height={200} width={200}>
-                                                <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
-                                                <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
-                                                <XAxis
-                                                    title="X Axis"
-                                                    style={{
-                                                        line: {stroke: '#ADDDE1'},
-                                                        ticks: {stroke: '#ADDDE1'},
-                                                        text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}
-                                                    }}
-                                                />
-                                                <LineSeries
-                                                    curve={curveCatmullRom.alpha(0.5)}
-                                                    data={this.state.data}
-                                                />
-                                            </XYPlot> : <div>
-                                                <p>No scores recorded</p>
-                                            </div>
+                                            this.state.student && this.state.student.score ?
+                                                <div>
+                                                <XYPlot height={200} width={200}>
+                                                    <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
+                                                    <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
+                                                    <XAxis hideLine tickValues={[1, 2, 3, 4, 5]} tickFormat={v => parseInt(v)} title="X"/>
+
+                                                    <YAxis hideTicks/>
+                                                    <YAxis
+                                                        // title="X Axis"
+                                                        style={{
+                                                            line: {stroke: '#ADDDE1'},
+                                                            ticks: {stroke: '#ADDDE1'},
+                                                            text: {stroke: 'none', fill: '#6b6b76', fontWeight: 600}
+                                                        }}
+                                                    />
+                                                    {/*<LineSeries*/}
+                                                        {/*curve={curveCatmullRom.alpha(0.5)}*/}
+                                                        {/*data={this.state.data}*/}
+                                                    {/*/>*/}
+                                                    <VerticalBarSeries data={this.state.data} />
+
+                                                </XYPlot>
+                                                </div>: <div>
+                                                    <p>No scores recorded</p>
+                                                </div>
                                         }
 
                                     </td>
@@ -247,12 +253,12 @@ class PresentationPage extends React.Component {
                     </Modal>
                 </div>
             </div>
-            return (
-                <Fragment>
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                        {content}
-                    </div>
-                </Fragment>
+            // return (
+            //     <Fragment>
+            //         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            //             {content}
+            //         </div>
+            //     </Fragment>
         )
     }
 }
