@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "post-build": "react-snap",
+    "deploy": "git checkout master && git merge dev && git push heroku master",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
