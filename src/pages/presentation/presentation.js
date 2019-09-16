@@ -28,13 +28,16 @@ class PresentationPage extends React.Component {
     async componentDidMount() {
         const students = await getStudents(); // get from back end
         await this.setState({students});
+        window.onbeforeunload = this.closeModal;
     }
 
     componentWillUnmount() {
+        window.onbeforeunload = this.closeModal;
         console.log("clearInterval(this.timerID) at componentWillUnmount")
+        this.setState({modalOpen: false, student: null})
+        postPresentingStudent({})
         clearInterval(this.timerID);
         clearInterval(this.interval);
-        clearInterval(this.scoreInterval);
     }
 
     async getScores () {
