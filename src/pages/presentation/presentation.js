@@ -23,7 +23,45 @@ class PresentationPage extends React.Component {
         }
     }
 
-    presentLength = 20;
+    presentLength = 120;
+
+    criteria = [
+        {
+            name: 'criteria_1',
+            title: 'Usability',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_2',
+            title: 'Visual Appealing',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_3',
+            title: 'Interactivity',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_4',
+            title: 'Effort',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_5',
+            title: 'Creativity',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+    ]
 
     async componentDidMount() {
         const students = await getStudents(); // get from back end
@@ -216,7 +254,7 @@ class PresentationPage extends React.Component {
                                                 <XYPlot height={200} width={200}>
                                                     <HorizontalGridLines style={{stroke: '#B7E9ED'}}/>
                                                     <VerticalGridLines style={{stroke: '#B7E9ED'}}/>
-                                                    <XAxis hideLine tickValues={[0, 1, 2]} tickFormat={v => parseInt(v) + 1}/>
+                                                    <XAxis hideLine tickValues={[0, 1, 2, 3, 4]} tickLabelAngle={-90} tickFormat={v => this.criteria[v].title}/>
 
                                                     <YAxis hideTicks/>
                                                     <YAxis

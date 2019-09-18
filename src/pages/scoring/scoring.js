@@ -10,27 +10,45 @@ class ScoringPage extends React.Component {
             students: [],
             presenting_student: null,
             id: '',
-            score: {}
+            score: {},
+            comment: '',
         }
     }
 
     criteria = [
         {
             name: 'criteria_1',
+            title: '1. Usability',
             values: [
-                1, 2, 3, 4
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
             ]
         },
         {
             name: 'criteria_2',
+            title: '2. Visual Appealing',
             values: [
-                1, 2, 3, 4
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
             ]
         },
         {
             name: 'criteria_3',
+            title: '3. Interactivity',
             values: [
-                1, 2, 3, 4
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_4',
+            title: '4. Effort',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            ]
+        },
+        {
+            name: 'criteria_5',
+            title: '5. Creativity',
+            values: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10
             ]
         },
     ]
@@ -66,8 +84,10 @@ class ScoringPage extends React.Component {
             const payload = {
                 user_id: parseInt(this.state.id),
                 presenter_id: this.state.presenting_student.id,
+                comment: this.state.comment,
                 ...this.state.score
             }
+            console.log(payload);
             const res = await postScore(payload)
             alert('Submited score for ' + this.state.presenting_student.name)
         }
@@ -84,7 +104,7 @@ class ScoringPage extends React.Component {
                         url={this.state.presenting_student.url}
                     />
                 </div>
-                <div className={"row"} style={{marginTop: "30px"}}>
+                <div className={"row mt-2"}>
                     <div>
                         <div className="form-group row">
                             <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">ID</label>
@@ -99,12 +119,15 @@ class ScoringPage extends React.Component {
                         </div>
                         {/*checkboxes*/}
                         <fieldset className="form-group">
-                            {this.criteria.map(c => <div key={c.name} className="row" style={{marginTop: "30px"}}>
-                                <legend className="col-form-label col-lg-10 pt-0">{c.name}</legend>
-                                <div className="col-sm-10">
-                                    {c.values.map(v => <div key={v} className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name={c.name}
-                                               id={c.name+v} value={v} onChange={() => {
+                            {this.criteria.map(c => <div key={c.name} className="row mt-4">
+                                <legend className="col-form-label col-lg-10 pt-0">{c.title}</legend>
+                                <div className="col-sm-12">
+                                    {c.values.map(v => <div key={v} className="form-check form-check-inline mr-4">
+                                        <input className="form-check-input"
+                                               type="radio" name={c.name}
+                                               id={c.name+v} value={v}
+                                               style={{padding: '1rem'}}
+                                               onChange={() => {
                                                    this.setState({score: {...this.state.score, [c.name]: v}})
                                         }}/>
                                         <label className="form-check-label" htmlFor={c.name+v}>{v}</label>
@@ -112,6 +135,18 @@ class ScoringPage extends React.Component {
                                 </div>
                             </div>)}
                         </fieldset>
+                        <div className="form-group row mt-2">
+                            <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">Comment (optional)</label>
+                            <div className="col-sm-10">
+                                <textarea
+                                    className="form-control"
+                                    value={this.state.comment}
+                                    id="formControlTextarea"
+                                    rows="3"
+                                    onChange={e => this.setState({comment: e.target.value})}
+                                />
+                            </div>
+                        </div>
                         <button className="btn btn-success" style={{marginBottom: "50px"}}
                                 onClick={this.setUser}>Submit
                         </button>
