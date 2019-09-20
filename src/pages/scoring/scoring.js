@@ -82,12 +82,12 @@ class ScoringPage extends React.Component {
             }
 
             const payload = {
-                user_id: parseInt(this.state.id),
+                user_id: (this.state.id),
                 presenter_id: this.state.presenting_student.id,
                 comment: this.state.comment,
                 ...this.state.score
             }
-            console.log(payload);
+            console.log(JSON.stringify(payload));
             const res = await postScore(payload)
             alert('Submited score for ' + this.state.presenting_student.name)
         }

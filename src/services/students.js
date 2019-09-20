@@ -19,12 +19,26 @@ function postData(url, data) {
     }).then(res => res)
 }
 
+function putData(url, data) {
+    return fetch(url, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    }).then(res => res)
+}
+
 function getStudents() {
     return getData(`${uri}/students`)
 }
 
 function postStudent(student) {
     return postData(`${uri}/students`, student)
+}
+
+function editStudent(student) {
+    return putData(`${uri}/students/${student.id}`, student)
 }
 
 function getPresentingStudent() {
@@ -40,6 +54,7 @@ export {
     getData,
     getStudents,
     postStudent,
+    editStudent,
     getPresentingStudent,
     postPresentingStudent
 }

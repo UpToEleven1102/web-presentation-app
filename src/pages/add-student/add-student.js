@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import Modal from 'react-modal'
 
-import {getStudents, postStudent} from '../../services/students'
+import {editStudent, getStudents, postStudent} from '../../services/students'
 import LoginPage from '../signin/signin'
 import './add-student.css'
 
@@ -41,8 +41,16 @@ class AddStudentPage extends Component {
         this.reset()
     }
 
+    submitEdit = async () => {
+        const student = this.state.student
+        delete student._id
+        const res = await editStudent(student)
+        this.setState({modalOpen: false, student: null})
+        this.reset()
+    }
+
     editStudent = (student) => {
-        this.setState({modalOpen: true, student: student.id})
+        this.setState({modalOpen: true, student})
     };
 
     render() {
@@ -81,7 +89,8 @@ class AddStudentPage extends Component {
                             <th scope="col">Image</th>
                             <th scope="col">Name</th>
                             <th scope="col">URL</th>
-                            <th scope="col">Score</th>
+                            <th scope="col">Ban Score</th>
+                            <th scope="col">Thay Score</th>
                             <th scope="col">Contribution</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -94,6 +103,7 @@ class AddStudentPage extends Component {
                                 <td>{student.name}</td>
                                 <td>{student.url}</td>
                                 <td>{JSON.stringify(student.score)}</td>
+                                <td>{student.thay_score}</td>
                                 <td>{student.num_scored}</td>
                                 <td>
                                     <button onClick={() => this.editStudent(student)}
@@ -110,11 +120,35 @@ class AddStudentPage extends Component {
                 <Modal
                     isOpen={this.state.modalOpen}
                 >
-                    <p>{JSON.stringify(this.state.student)}</p>
+                    {this.state.student && <div className="field">
+                        <label htmlFor='name'>Name: </label>
+                        <input id='name' name='name'
+                               value={this.state.student.name} type="text"
+                               onChange={e => this.setState({student: {...this.state.student, name:e.target.value}})}/>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                        <label htmlFor='image'>Image Link: </label>
+                        <input id='image' name='image'
+                               value={this.state.student.image}
+                               type="text" onChange={e => this.setState({student: {...this.state.student, image: e.target.value}})}/>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                        <label htmlFor="url">URL: </label>
+                        <input id='url' name='url'
+                               value={this.state.student.url} type="text"
+                               onChange={e => this.setState({student: {...this.state.student, url: e.target.value}})}/>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <label htmlFor="url">Thay score: </label>
+                        <input id='url' name='thay_score'
+                               value={this.state.student.thay_score} type="number"
+                               onChange={e => this.setState({student: {...this.state.student, thay_score: e.target.value}})}/>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <button type='submit' onClick={this.submitEdit}>Submit</button>
+                    </div>
+                    }
                     <button
-                        onClick={() => this.setState({modalOpen: false})}
+                        onClick={() => this.setState({modalOpen: false, student: null})}
                     >Cancel</button>
-                    <button >Submit</button>
                 </Modal>
             </div>
         </div>
