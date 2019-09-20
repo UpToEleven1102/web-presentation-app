@@ -187,7 +187,9 @@ class PresentationPage extends React.Component {
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Image</th>
-                            <th scope="col">URL</th>
+                            <th scope="col">Screenshot</th>
+                            <th scope="col">Presentation</th>
+                            <th scope="col">GitHub</th>
                             <th scope="col">Score</th>
                             <th scope="col"></th>
                         </tr>
@@ -199,8 +201,10 @@ class PresentationPage extends React.Component {
                                 <td scope="row">{student.id}</td>
                                 <td>{student.name}</td>
                                 <td><img alt={student.name} style={{height: 100}} src={student.image}/></td>
+                                <td><img alt={student.name} style={{height: 100}} src={student.screenshot}/></td>
                                 <td>{student.url}</td>
-                                <td>{JSON.stringify(student.score)}</td>
+                                <td>{student.githubURL}</td>
+                                <td>{JSON.stringify(student.score) ? JSON.stringify(student.score) : 'N/A'}</td>
                                 <td>
                                     <button
                                         type="button"

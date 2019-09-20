@@ -92,7 +92,7 @@ class AddStudentPage extends Component {
                             <th scope="col">Ban Score</th>
                             <th scope="col">Thay Score</th>
                             <th scope="col">Contribution</th>
-                            <th scope="col">Action</th>
+                            <th scope="col"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -138,11 +138,13 @@ class AddStudentPage extends Component {
                                value={this.state.student.url} type="text"
                                onChange={e => this.setState({student: {...this.state.student, url: e.target.value}})}/>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
                         <label htmlFor="url">Thay score: </label>
                         <input id='url' name='thay_score'
                                value={this.state.student.thay_score} type="number"
                                onChange={e => this.setState({student: {...this.state.student, thay_score: e.target.value}})}/>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
                         <button type='submit' onClick={this.submitEdit}>Submit</button>
                     </div>
                     }

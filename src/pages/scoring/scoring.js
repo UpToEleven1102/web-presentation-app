@@ -107,7 +107,7 @@ class ScoringPage extends React.Component {
                 <div className={"row mt-2"}>
                     <div>
                         <div className="form-group row">
-                            <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">ID</label>
+                            <label htmlFor="colFormLabel" className="col-sm-10 col-form-label">Your ID</label>
                             <div className="col-sm-10">
                                 <input type="number" className="form-control"
                                        value={this.state.id}
