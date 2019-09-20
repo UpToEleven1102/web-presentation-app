@@ -19,9 +19,9 @@ class NavBar extends Component {
                             <li className="nav-item active" id="homeTab">
                                 <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
                             </li>
-                            {/*<li className="nav-item" id="editTab">*/}
-                                {/*<Link className="nav-link" to="/presentation">Presentation</Link>*/}
-                            {/*</li>*/}
+                            <li className="nav-item" id="editTab">
+                                <Link className="nav-link" to="/presentation">Presentation</Link>
+                            </li>
 
                             <li className="nav-item" id="addTab">
                                 <Link className="nav-link" to="/scoring">Scoring</Link>

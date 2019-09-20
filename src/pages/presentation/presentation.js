@@ -63,14 +63,7 @@ class PresentationPage extends React.Component {
         },
     ]
 
-    async componentDidMount() {
-        const students = await getStudents(); // get from back end
-        await this.setState({students});
-        window.onbeforeunload = this.closeModal;
-    }
-
     componentWillUnmount() {
-        window.onbeforeunload = this.closeModal;
         console.log("clearInterval(this.timerID) at componentWillUnmount")
         this.setState({modalOpen: false, student: null})
         postPresentingStudent({})
@@ -178,7 +171,11 @@ class PresentationPage extends React.Component {
 
     render() {
         const content = !this.state.user ? <LoginPage
-            success={(user) => this.setState({user})}
+            success={async (user) => {
+                this.setState({user})
+                const students = await getStudents(); // get from back end
+                await this.setState({students});
+            }}
         /> :
         // return(
             <div>
